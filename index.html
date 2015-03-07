@@ -42,18 +42,46 @@
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script>
+  	var lastColor = '#00F',
+  		index = 2,
+  		increment = true,
+  		counter = 0;
+
   	$(document).ready(function() {
   		setInterval(function() {
-  			$('body').css('background-color', randomBackgroundColor());
-  		}, 90);
+  			//$('body').css('background-color', randomColor());
+  			lastColor = nextColor(lastColor, index, increment);
+  			$('body').css('background-color', lastColor);
+  			counter++;
+  			if (counter === 15) {
+  				counter = 0;
+  				increment = !increment;
+  				index = (index % 3) + 1;
+  			}
+  		}, 50);
   	});
 
-  	function randomBackgroundColor() {
+  	function randomColor() {
   		var color = "#";
   		for (var i = 0; i < 6; i++) {
   			color += (Math.floor(Math.random() * 16)).toString(16);
   		}
   		return color;
+  	}
+
+  	function nextColor(color, i, inc) {
+  		var integer = parseInt(color[i], 16);
+  		console.log('\ncolor: ' + color );
+  		if (inc) {
+  			color = replaceAt(color, i, (++integer).toString(16));
+  		} else {
+  			color = replaceAt(color, i, (--integer).toString(16));
+  		}
+  		return color;
+  	}
+
+  	function replaceAt(str, i, char) {
+  		return str.substr(0, i) + char + str.substr(i + char.length);
   	}
   </script>
 </body>
